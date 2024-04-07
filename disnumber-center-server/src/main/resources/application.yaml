@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: number-center
+  profiles:
+    active: dev
+  ### 日期格式配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  main:
+    allow-bean-definition-overriding: true
+
+### queue 信息
+rule:
+  history:
+    create:
+      exchange:
+        name: disnumber.rule.history.create.exchange
+      queue:
+        name: disnumber.rule.history.create.queue
+
+#### mybatis 配置信息
+mybatis:
+  config-location: classpath:mybatis-config.xml
+  check-config-location: true
+  mapper-locations: classpath:mappers/*.xml

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright 2023-2024 the leader
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.org.byc.disnumber.center.model.mapper.RuleInstanceHistoryMapper" >
+    <resultMap id="BaseResultMap" type="cn.org.byc.disnumber.center.model.entity.RuleInstanceHistory" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="instance_code" property="instanceCode" jdbcType="VARCHAR" />
+        <result column="code" property="code" jdbcType="VARCHAR" />
+        <result column="val" property="val" jdbcType="INTEGER" />
+    </resultMap>
+
+    <insert id="insertSelective" parameterType="cn.org.byc.disnumber.center.model.entity.RuleInstanceHistory">
+        insert into rule_instance_history
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="instanceCode != null" >
+                instance_code,
+            </if>
+            <if test="code != null" >
+                code,
+            </if>
+            <if test="val != null" >
+                val,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="instanceCode != null" >
+                #{instanceCode,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null" >
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="val != null" >
+                #{val,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectCoveryRuleCode" resultMap="BaseResultMap">
+        SELECT
+        CODE,
+        max(val) as val
+        FROM
+        rule_instance_history
+        where create_time >= #{time}
+        GROUP BY CODE
+    </select>
+
+    <select id="selectCoveryRuleInstanceCode" resultMap="BaseResultMap">
+        SELECT
+        CODE,
+        max(val) as val
+        FROM
+        rule_instance_history
+        where instance_code >= #{code}
+        GROUP BY CODE
+    </select>
+</mapper>

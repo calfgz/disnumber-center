@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2023-2024 the leader
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.byc.disnumber.center.model.mapper.RuleMapper">
+    <resultMap id="BaseResultMap" type="cn.org.byc.disnumber.center.model.entity.Rule">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="type" jdbcType="CHAR" property="type" />
+        <result column="no" jdbcType="INTEGER" property="no" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="val" jdbcType="VARCHAR" property="val" />
+        <result column="format" jdbcType="VARCHAR" property="format" />
+        <result column="len" jdbcType="INTEGER" property="len" />
+        <result column="min" jdbcType="INTEGER" property="min" />
+        <result column="max" jdbcType="INTEGER" property="max" />
+        <result column="step" jdbcType="INTEGER" property="step" />
+        <result column="padding" jdbcType="VARCHAR" property="padding" />
+        <result column="instance_id" jdbcType="INTEGER" property="instanceId" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, type, no, code, val, format, len, min, max, step, padding, instance_id
+    </sql>
+
+    <select id="selectByRuleCode" resultMap="BaseResultMap">
+        SELECT
+        b.id,
+        type,
+        no,
+        b.code,
+        val,
+        format,
+        depType,
+        len,
+        min,
+        max,
+        step,
+        padding,
+        instance_id
+        from rule_instance a, rule b
+        where a.id = b.instance_id
+        and a.code = #{code}
+        ORDER BY b.no
+    </select>
+
+    <insert id="insertSelective">
+        insert into rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="no != null">
+                no,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
+            <if test="val != null">
+                val,
+            </if>
+            <if test="format != null">
+                format,
+            </if>
+            <if test="len != null">
+                len,
+            </if>
+            <if test="min != null">
+                min,
+            </if>
+            <if test="max != null">
+                max,
+            </if>
+            <if test="step != null">
+                step,
+            </if>
+            <if test="padding != null">
+                padding,
+            </if>
+            <if test="instanceId != null">
+                instance_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="no != null">
+                #{no,jdbcType=INTEGER},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="val != null">
+                #{val,jdbcType=VARCHAR},
+            </if>
+            <if test="format != null">
+                #{format,jdbcType=VARCHAR},
+            </if>
+            <if test="len != null">
+                #{len,jdbcType=INTEGER},
+            </if>
+            <if test="min != null">
+                #{min,jdbcType=INTEGER},
+            </if>
+            <if test="max != null">
+                #{max,jdbcType=INTEGER},
+            </if>
+            <if test="step != null">
+                #{step,jdbcType=INTEGER},
+            </if>
+            <if test="padding != null">
+                #{padding,jdbcType=VARCHAR},
+            </if>
+            <if test="instanceId != null">
+                #{instanceId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="deleteByRuleId">
+        DELETE FROM rule
+        where instance_id = #{id}
+    </delete>
+
+    <delete id="deleteByPrimaryKey">
+        delete from rule
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from rule
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+</mapper>
